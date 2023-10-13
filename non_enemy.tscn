@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://dtdd1m2qdej80"]
+
+[ext_resource type="Script" path="res://non_enemy.gd" id="1_270na"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e37he"]
+albedo_color = Color(0.721569, 0.647059, 0.905882, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_snq70"]
+material = SubResource("StandardMaterial3D_e37he")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dnu7i"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yavlb"]
+radius = 0.4
+height = 1.9
+
+[node name="NonEnemy" type="CharacterBody3D"]
+script = ExtResource("1_270na")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_snq70")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_dnu7i")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+target_desired_distance = 2.0
+path_max_distance = 10.01
+avoidance_enabled = true
+radius = 0.8
+
+[node name="Area3D" type="Area3D" parent="."]
+disable_mode = 2
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_yavlb")
+
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]

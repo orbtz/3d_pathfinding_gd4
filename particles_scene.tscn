@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://blkkr6o6hw30a"]
+
+[ext_resource type="PackedScene" uid="uid://i06xd40tqnf4" path="res://cpu_particles_3d.tscn" id="1_4g0u8"]
+
+[sub_resource type="GDScript" id="GDScript_0yvux"]
+script/source = "extends Node
+
+@onready var particles3d : CPUParticles3D = $CPUParticles3D
+
+func _ready():
+	particles3d.restart()
+
+func _on_timer_timeout():
+	queue_free()
+"
+
+[node name="particles_scene" type="Node"]
+script = SubResource("GDScript_0yvux")
+
+[node name="CPUParticles3D" parent="." instance=ExtResource("1_4g0u8")]

@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://i06xd40tqnf4"]
+
+[ext_resource type="Script" path="res://cpu_particles_3d.gd" id="1_lm6uy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yn5af"]
+transparency = 1
+albedo_color = Color(1, 0.811765, 0.811765, 0.490196)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lcpcf"]
+lightmap_size_hint = Vector2i(17, 9)
+material = SubResource("StandardMaterial3D_yn5af")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="Gradient" id="Gradient_sivnc"]
+colors = PackedColorArray(1, 0.65, 0.65, 1, 1, 1, 1, 0)
+
+[node name="CPUParticles3D" type="CPUParticles3D"]
+emitting = false
+amount = 32
+lifetime = 4.0
+one_shot = true
+explosiveness = 0.95
+local_coords = true
+draw_order = 2
+mesh = SubResource("SphereMesh_lcpcf")
+emission_shape = 2
+emission_sphere_radius = 0.5
+direction = Vector3(0, 1, 0)
+spread = 10.0
+gravity = Vector3(0, -8, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 4.0
+angular_velocity_min = 36.3
+angular_velocity_max = 36.3
+linear_accel_min = 5.04
+linear_accel_max = 5.04
+scale_amount_min = 0.4
+color_ramp = SubResource("Gradient_sivnc")
+hue_variation_max = 0.22
+script = ExtResource("1_lm6uy")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://17ypqybf8dbd"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_t35rw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v8jqc"]
+albedo_color = Color(0.839216, 0.623529, 0.392157, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_axnia"]
+material = SubResource("StandardMaterial3D_v8jqc")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_628mf"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_icxdu"]
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+disable_mode = 2
+script = ExtResource("1_t35rw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_axnia")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_628mf")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.8
+avoidance_enabled = true
+radius = 0.1
+neighbor_distance = 1.0
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_icxdu")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.05
+
+[connection signal="path_changed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_path_changed"]
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
+[connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
+[connection signal="area_entered" from="Area3D" to="." method="_on_area_3d_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
