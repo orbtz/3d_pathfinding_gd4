@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://c2w4ylnxto0ab"]
+[gd_scene load_steps=7 format=3 uid="uid://c2w4ylnxto0ab"]
 
 [ext_resource type="Script" path="res://enemy.gd" id="1_y5hlr"]
 
@@ -9,6 +9,33 @@ albedo_color = Color(0.619608, 0.788235, 0.568627, 1)
 material = SubResource("StandardMaterial3D_dgooy")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_08khg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8fyu"]
+bg_color = Color(0.690196, 0.52549, 0.52549, 1)
+skew = Vector2(0.2, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+shadow_color = Color(1, 1, 1, 1)
+shadow_size = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_it438"]
+bg_color = Color(0.780392, 0.203922, 0.203922, 1)
+skew = Vector2(0.2, 0)
+border_color = Color(0.247059, 0.678431, 0.396078, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+shadow_color = Color(1, 1, 1, 1)
+anti_aliasing = false
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 9
@@ -23,8 +50,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_08khg")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-target_desired_distance = 2.0
+target_desired_distance = 1.2
 avoidance_enabled = true
-radius = 0.8
+radius = 0.2
+neighbor_distance = 25.0
 
+[node name="LifeBar" type="ProgressBar" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -10.0
+offset_right = 45.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(45, 10)
+theme_override_styles/background = SubResource("StyleBoxFlat_q8fyu")
+theme_override_styles/fill = SubResource("StyleBoxFlat_it438")
+max_value = 3.0
+step = 1.0
+value = 3.0
+show_percentage = false
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
 [connection signal="velocity_computed" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_velocity_computed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

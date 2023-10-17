@@ -15,4 +15,4 @@ func _on_area_3d_body_entered(body):
 
 		get_parent().add_child(new_particles)
 		
-#		body.get_parent().queue_free()
+		get_tree().call_group("enemies", "check_hit_enemy", body)
